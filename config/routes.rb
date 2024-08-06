@@ -3,10 +3,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     # USERS
-    post '/users'                  => 'users#create'
+    post '/users'                  => 'users#create' # done
 
     # SESSIONS
-    post '/sessions'               => 'sessions#create'
+    post '/sessions'               => 'sessions#create' # done
     get  '/authenticated'          => 'sessions#authenticated'
     delete '/sessions'             => 'sessions#destroy'
 

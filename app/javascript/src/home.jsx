@@ -15,8 +15,8 @@ const Home = props => (
     </form>
     <form id="log-in-form">
       <h5>Log In</h5>
-      <input placeholder="username" />
-      <input placeholder="password" />
+      <input id='log-in-username' placeholder="username" />
+      <input id='log-in-password' placeholder="password" />
       <button type='submit'>Log in</button>
     </form>
   </div>
@@ -62,11 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
       error: function(jqXHR) {
         if (jqXHR.status === 422) {
           var errors = jqXHR.responseJSON.errors;
-          console.log('Errors:', errors.join(', '));
+          console.log('Errors:', errors.join('\n'));
           alert(errors.join(', '));
         } else {
           console.log('Request failed: ', jqXHR);
         }
+      }
+    };
+    $.ajax(request);
+  });
+
+  $('#log-in-form').on('submit', function(event) {
+    event.preventDefault();
+
+    var username = $('#log-in-username').val();
+    var password = $('#log-in-password').val();
+    var request = {
+      type: 'POST',
+      url: '/api/sessions',
+      data: {
+        user: {
+          username: username,
+          password: password
+        }
+      },
+      success: function(response) {
+        if (response.success) {
+          console.log('user successfully logged in');
+        } else {
+          alert('Invalid username or password');
+        }
+      },
+      error: function(error) {
+        console.log('Request failed: ', error);
       }
     };
     $.ajax(request);
