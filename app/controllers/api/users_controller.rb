@@ -4,11 +4,15 @@ module Api
       @user = User.new(user_params)
 
       if @user.save
-        render 'api/users/create'
+        render json: {
+          success: true,
+          message: 'User successfully created',
+        }, status: :created
       else
         render json: {
-          success: false
-        }
+          success: false,
+          errors: @user.errors.full_messages
+        }, status: :unprocessable_entity
       end
     end
 
