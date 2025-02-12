@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './home.scss';
+import Feed from './feed';
+import CreateTweet from './createTweet';
 
 const Home = props => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -91,10 +93,10 @@ const Home = props => {
 
   if (isAuthenticated) {
     return (
-      <div className='container'>
-        <h1 className='mt-3 text-center'>Your Feed</h1>
-        {/* Render the user's feed here */}
-      </div>
+      <>
+        <CreateTweet />
+        <Feed />
+      </>
     );
   }
 
