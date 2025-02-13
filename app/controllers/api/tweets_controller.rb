@@ -12,8 +12,9 @@ module Api
       @tweet = user.tweets.new(tweet_params)
 
       if @tweet.save
-        TweetMailer.notify(@tweet).deliver!
-        render 'api/tweets/create'
+        render json: {success: true, tweet: @tweet}, status: :created
+      else
+        render json: {success: false, errors: @tweet.errors.full_messages}, status: :unprocessable_entity
       end
     end
 
@@ -49,7 +50,7 @@ module Api
     private
 
     def tweet_params
-      params.require(:tweet).permit(:message, :image)
+      params.permit(:message, :image)
     end
   end
 end
