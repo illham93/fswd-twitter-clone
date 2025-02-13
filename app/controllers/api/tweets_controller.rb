@@ -1,8 +1,8 @@
 module Api
   class TweetsController < ApplicationController
     def index
-      @tweets = Tweet.all.order(created_at: :desc)
-      render 'api/tweets/index'
+      @tweets = Tweet.all.order(created_at: :desc).includes(:user)
+      render json: {success: true, tweets: @tweets.as_json(include: :user)}
     end
 
     def create
@@ -12,7 +12,7 @@ module Api
       @tweet = user.tweets.new(tweet_params)
 
       if @tweet.save
-        render json: {success: true, tweet: @tweet}, status: :created
+        render json: {success: true, tweet: @tweet.as_json(include: :user)}, status: :created
       else
         render json: {success: false, errors: @tweet.errors.full_messages}, status: :unprocessable_entity
       end
