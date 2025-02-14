@@ -4,7 +4,7 @@ import $ from 'jquery';
 import './home.scss';
 import Feed from './feed';
 import CreateTweet from './createTweet';
-import Logout from './logout';
+import Navbar from './navbar';
 
 const Home = props => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -95,7 +95,7 @@ const Home = props => {
   if (isAuthenticated) {
     return (
       <>
-        <Logout />
+        <Navbar />
         <CreateTweet />
         <Feed />
       </>

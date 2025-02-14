@@ -1,7 +1,7 @@
 import React from "react";
 import { safeCredentials } from "./utils/fetchHelper";
 
-class Logout extends React.Component {
+class Navbar extends React.Component {
 
     logout = () => {
         fetch('/api/sessions', safeCredentials({
@@ -22,9 +22,12 @@ class Logout extends React.Component {
 
     render() {
         return (
-            <button onClick={this.logout} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">Log out</button>
+            <>
+                <button onClick={this.logout} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">Log out</button>
+                <button onClick={this.myTweets} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">My Tweets</button>
+            </>
         )
     }
 }
 
-export default Logout;
+export default Navbar;
