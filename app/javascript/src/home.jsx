@@ -4,6 +4,7 @@ import $ from 'jquery';
 import './home.scss';
 import Feed from './feed';
 import CreateTweet from './createTweet';
+import Logout from './logout';
 
 const Home = props => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -94,6 +95,7 @@ const Home = props => {
   if (isAuthenticated) {
     return (
       <>
+        <Logout />
         <CreateTweet />
         <Feed />
       </>
