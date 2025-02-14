@@ -46,16 +46,37 @@ class MyTweets extends React.Component {
         });
     }
 
+    delete = (id) => {
+        if (confirm('Are you sure you want to delete this Tweet?')) {
+            fetch(`/api/tweets/${id}`, safeCredentials({
+                method: 'DELETE'
+            }))
+            .then(handleErrors)
+            .then(response => {
+                if (response.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error: could not delete Tweet');
+                }
+            })
+            .catch(error => {
+                console.error('Request failed:', error);
+                alert('Request failed. Check the console for more details.');
+            })
+        }
+    }
+
     render () {
         const {tweets} = this.state
 
         return (
             <div className="container">
                 <h3 className="text-center">My Tweets</h3>
-                <ul>
+                <ul className="list-unstyled">
                     {tweets.map(tweet => (
-                        <li key={tweet.id}>
+                        <li key={tweet.id} className="d-flex justify-content-between align-items-center border p-2 mb-2 rounded">
                             <p><strong>Message:</strong> {tweet.message}</p>
+                            <button onClick={() => this.delete(tweet.id)} title="Delete" className="btn btn-sm btn-danger">X</button>
                         </li>
                     ))}
                 </ul>
