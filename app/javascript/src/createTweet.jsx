@@ -16,7 +16,7 @@ class CreateTweet extends React.Component {
         .then(response => {
             if (response.success) {
                 alert('Tweet created');
-                event.target.reset();
+                window.location.reload();
             } else {
                 alert('Error: ' + response.errors.join(', '));
             }

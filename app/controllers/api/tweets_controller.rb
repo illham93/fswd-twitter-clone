@@ -43,7 +43,7 @@ module Api
 
       if user
         @tweets = user.tweets
-        render 'api/tweets/index'
+        render json: {success: true, tweets: @tweets}, status: :ok
       end
     end
 
