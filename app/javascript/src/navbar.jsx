@@ -20,11 +20,20 @@ class Navbar extends React.Component {
         });
     }
 
+    myTweets = () => {
+        window.location.href = '/my_tweets';
+    }
+
+    home = () => {
+        window.location.href = '/';
+    }
+
     render() {
         return (
             <>
-                <button onClick={this.logout} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">Log out</button>
+                <button onClick={this.home} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">Home</button>
                 <button onClick={this.myTweets} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">My Tweets</button>
+                <button onClick={this.logout} type="button" className="mt-3 ms-3 btn-lg btn-outline-primary">Log out</button>
             </>
         )
     }
