@@ -39,7 +39,7 @@ module Api
     end
 
     def index_by_user
-      user = User.find_by(username: params[:username])
+      user = User.find_by(id: params[:id])
 
       if user
         @tweets = user.tweets

@@ -5,7 +5,7 @@ class MyTweets extends React.Component {
 
     state = {
         tweets: [],
-        username: '',
+        id: '',
     }
 
     componentDidMount() {
@@ -15,10 +15,11 @@ class MyTweets extends React.Component {
         .then(handleErrors)
         .then(response => {
             if (response.authenticated) {
-                const username = response.username;
-                this.setState({username});
+                console.log(response.user);
+                const id = response.user.id;
+                this.setState({id});
 
-                fetch(`/api/users/${username}/tweets`, safeCredentials({
+                fetch(`/api/users/${id}/tweets`, safeCredentials({
                     method: 'GET',
                 }))
                 .then(handleErrors)

@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Navbar from "../navbar"; 
-
+import UserFeed from "./userFeed";
 
 const Index = () => {
   return (
     <div>
         <Navbar />
+        <UserFeed />
     </div>
   );
 };
