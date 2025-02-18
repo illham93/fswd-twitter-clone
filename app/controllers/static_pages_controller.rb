@@ -4,4 +4,7 @@ class StaticPagesController < ApplicationController
 
   def my_tweets
   end
+
+  def user
+  end
 end

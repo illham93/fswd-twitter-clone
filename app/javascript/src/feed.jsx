@@ -36,7 +36,7 @@ class Feed extends React.Component {
                 <ul>
                     {tweets.map(tweet => (
                         <li key={tweet.id}>
-                            <p><strong>User:</strong> {tweet.user.username}</p>
+                            <p><strong>User:</strong> <a href={`/user/${tweet.user.id}`}>{tweet.user.username}</a></p>
                             <p><strong>Message:</strong> {tweet.message}</p>
                         </li>
                     ))}
