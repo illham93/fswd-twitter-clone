@@ -42,8 +42,10 @@ module Api
       user = User.find_by(id: params[:id])
 
       if user
-        @tweets = user.tweets
-        render json: {success: true, tweets: @tweets}, status: :ok
+        @tweets = user.tweets.order(created_at: :desc).includes(:user)
+        render json: {success: true, tweets: @tweets.as_json(include: :user)}, status: :ok
+      else
+        render json: {success: false, errors: ['User not found']}, status: :not_found
       end
     end
 
