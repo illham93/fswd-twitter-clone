@@ -104,7 +104,7 @@ const Home = props => {
 
   return (
     <div className='container'>
-      <h1 className='mt-3 text-center'>Home</h1>
+      <h1 className='mt-3 text-center'>Twitter</h1>
       <form id="sign-up-form" onSubmit={handleSignUp}>
         <h5>Sign Up</h5>
         <input id='sign-up-username' className='form-control mb-1' placeholder="username" />
