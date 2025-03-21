@@ -1,95 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
 import './home.scss';
 import Feed from './feed';
 import CreateTweet from './createTweet';
 import Navbar from './navbar';
+import { safeCredentials } from './utils/fetchHelper';
 
 const Home = props => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [signUpData, setSignUpData] = useState({username: '', email: '', password: ''});
+  const [logInData, setLogInData] = useState({username: '', password: ''});
 
   useEffect(() => {
     // Check if the user is authenticated
-    $.ajax({
-      type: 'GET',
-      url: '/api/authenticated',
-      success: function(response) {
-        if (response.authenticated) {
+    fetch('/api/authenticated')
+      .then(response => response.json())
+      .then(data => {
+        if (data.authenticated) {
           setIsAuthenticated(true);
         }
-      },
-      error: function(error) {
+      })
+      .catch(error => {
         console.log('Request failed: ', error);
-      }
-    });
+      });
   }, []);
 
   const handleSignUp = (event) => {
     event.preventDefault();
 
-    var username = $('#sign-up-username').val();
-    var email = $('#sign-up-email').val();
-    var password = $('#sign-up-password').val();
-    var request = {
-      type: 'POST',
-      url: '/api/users',
-      data: {
-        user: {
-          username: username,
-          email: email,
-          password: password
-        }
+    fetch('/api/users', safeCredentials({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      success: function(response) {
-        if (response.success) {
-          console.log('user successfully added');
-          setIsAuthenticated(true);
-        } else {
-          console.log('Errors:', response.errors.join(', '));
-          alert(response.errors.join(', '));
-        }
-      },
-      error: function(jqXHR) {
-        if (jqXHR.status === 422) {
-          var errors = jqXHR.responseJSON.errors;
-          console.log('Errors:', errors.join('\n'));
-          alert(errors.join(', '));
-        } else {
-          console.log('Request failed: ', jqXHR);
-        }
+      body: JSON.stringify({user: signUpData}),
+    }))
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('User successfully created');
+        setIsAuthenticated(true);
+      } else {
+        console.log('Errors: ', data.errors.join(', '));
+        alert(data.errors.join(', '));
       }
-    };
-    $.ajax(request);
+    })
+    .catch(error => {
+      console.log('Request failed: ', error);
+    });
   };
 
   const handleLogIn = (event) => {
     event.preventDefault();
 
-    var username = $('#log-in-username').val();
-    var password = $('#log-in-password').val();
-    var request = {
-      type: 'POST',
-      url: '/api/sessions',
-      data: {
-        user: {
-          username: username,
-          password: password
-        }
+    fetch('/api/sessions', safeCredentials({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      success: function(response) {
-        if (response.success) {
-          console.log('user successfully logged in');
-          setIsAuthenticated(true);
-        } else {
-          alert('Invalid username or password');
-        }
-      },
-      error: function(error) {
-        console.log('Request failed: ', error);
+      body: JSON.stringify({user: logInData}),
+    }))
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('User successfully logged in');
+        setIsAuthenticated(true);
+      } else {
+        alert('Invalid username or password');
       }
-    };
-    $.ajax(request);
+    })
+    .catch(error => {
+      console.log('Request failed: ', error);
+    });
+  };
+
+  const handleChange = (event, setData) => {
+    const {name, value} = event.target;
+    setData(prevData => ({...prevData, [name]: value}));
   };
 
   if (isAuthenticated) {
@@ -107,15 +94,15 @@ const Home = props => {
       <h1 className='mt-3 text-center'>Twitter</h1>
       <form id="sign-up-form" onSubmit={handleSignUp}>
         <h5>Sign Up</h5>
-        <input id='sign-up-username' className='form-control mb-1' placeholder="username" />
-        <input id='sign-up-email' className='form-control mb-1' placeholder='email' />
-        <input id='sign-up-password' className='form-control mb-1' placeholder="password" />
+        <input name='username' className='form-control mb-1' placeholder="username" value={signUpData.username} onChange={(e) => handleChange(e, setSignUpData)} />
+        <input name='email' className='form-control mb-1' placeholder='email' value={signUpData.email} onChange={(e) => handleChange(e, setSignUpData)} />
+        <input name='password' className='form-control mb-1' placeholder="password" value={signUpData.password} onChange={(e) => handleChange(e, setSignUpData)}/>
         <button className='btn btn-primary mb-3' type='submit'>Sign Up</button>
       </form>
       <form id="log-in-form" className='mb-3' onSubmit={handleLogIn}>
         <h5>Log In</h5>
-        <input className='form-control mb-1' id='log-in-username' placeholder="username" />
-        <input className='form-control mb-1' id='log-in-password' placeholder="password" />
+        <input className='form-control mb-1' name='username' placeholder="username" value={logInData.username} onChange={(e) => handleChange(e, setLogInData)} />
+        <input className='form-control mb-1' name='password' placeholder="password" value={logInData.password} onChange={(e) => handleChange(e, setLogInData)} />
         <button className='btn btn-primary' type='submit'>Log in</button>
       </form>
     </div>
@@ -127,10 +114,4 @@ document.addEventListener('DOMContentLoaded', () => {
     <Home />,
     document.body.appendChild(document.createElement('div')),
   );
-
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
 });
